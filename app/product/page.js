@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const API_BASE = process.env.NEXT_PUBLIC_API_URL;
   console.debug("API_BASE", API_BASE);
   const { register, handleSubmit } = useForm();
@@ -41,6 +43,10 @@ export default function Home() {
     });
     fetchProducts();
   }
+
+  const editById = (id) => () => {
+    router.push(`/product/${id}`);
+  };
 
   useEffect(() => {
     fetchCategory();
@@ -115,6 +121,7 @@ export default function Home() {
           {
             products.map((p) => (
               <li key={p._id}>
+                <button className="border border-black p-1/2" onClick={editById(p._id)}>📝</button>{' '}
                 <button className="border border-black p-1/2" onClick={deleteById(p._id)}>❌</button>{' '}
                 <Link href={`/product/${p._id}`} className="font-bold">
                   {p.name}
